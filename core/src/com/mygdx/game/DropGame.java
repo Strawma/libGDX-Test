@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class DropGame extends ApplicationAdapter {
-	private Texture dropImage;
+
 	private Sound dropSound;
 	private Music rainMusic;
 
@@ -22,6 +24,7 @@ public class DropGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 
 	private Bucket bucket;
+	private Raindrops raindrops;
 
 	// constants for width and height of game screen - used in desktop and html launchers
 	public static final int WIDTH = 800;
@@ -30,7 +33,6 @@ public class DropGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		// loads assets - stored in assets folder
-		dropImage = new Texture("drop.png");
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
 		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
@@ -44,6 +46,9 @@ public class DropGame extends ApplicationAdapter {
 		// creates bucket rectangle
 		bucket = new Bucket();
 
+		// creates raindrops array
+		raindrops = new Raindrops();
+
 	}
 
 	@Override
@@ -51,21 +56,27 @@ public class DropGame extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+		draw();
+		update();
+	}
+
+	public void draw() {
 		batch.begin();
 		bucket.draw(batch);
+		raindrops.draw(batch);
 		batch.end();
+	}
 
-		// moves bucket based on keyboard input
-		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) bucket.moveLeft();
-		if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) bucket.moveRight();
-
-		// moves bucket based on mouse input
+	public void update() {
+		Vector3 touchPos = null;
 		if (Gdx.input.isTouched()) {
-			Vector3 touchPos = new Vector3();
+			touchPos = new Vector3();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0); // gets mouse position
 			camera.unproject(touchPos); // converts mouse position to game coordinates
-			bucket.updateMouse(touchPos.x);
 		}
+
+		bucket.update(touchPos);
+		raindrops.update();
 	}
 	
 	@Override

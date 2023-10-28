@@ -1,16 +1,19 @@
 package com.mygdx.game;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Bucket class - represents the bucket that the player controls.
  */
-public class Bucket extends Rectangle {
+public class Bucket extends Rectangle implements ISprite {
 
-  public static final Texture bucketImage = new Texture("bucket.png");
-  public static final int SIZE = bucketImage.getWidth();
+  public static final Texture TEXTURE = new Texture("bucket.png");
+  public static final int SIZE = TEXTURE.getWidth();
 
   public Bucket() {
     super();
@@ -21,31 +24,44 @@ public class Bucket extends Rectangle {
   }
 
   public void draw(SpriteBatch batch) {
-    batch.draw(bucketImage, x, y);
+    batch.draw(TEXTURE, x, y);
   }
 
-  public void updateMouse(float mouseX) {
+  public void update(Vector3 touchPos) {
+    // moves bucket based on keyboard input
+    if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) moveLeft();
+    if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) moveRight();
+
+    // moves bucket based on mouse input
+    if (touchPos != null) updateMouse(touchPos.x);
+  }
+
+  private void updateMouse(float mouseX) {
     x = mouseX - (float) SIZE / 2;
     clampLeft();
     clampRight();
   }
 
-  public void moveLeft() {
+  private void moveLeft() {
     x -= 200 * Gdx.graphics.getDeltaTime();
     clampLeft();
   }
 
-  public void moveRight() {
+  private void moveRight() {
     x += 200 * Gdx.graphics.getDeltaTime();
     clampRight();
   }
 
   private void clampLeft() {
-    if (x < 0) x = 0;
+    if (x < 0) {
+      x = 0;
+    }
   }
 
   private void clampRight() {
-    if (x > DropGame.WIDTH - SIZE) x = DropGame.WIDTH - SIZE;
+    if (x > DropGame.WIDTH - SIZE) {
+      x = DropGame.WIDTH - SIZE;
+    }
   }
 
 }
