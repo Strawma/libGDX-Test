@@ -10,7 +10,7 @@ public class Raindrops {
   private long lastDropTime;
 
   public Raindrops() {
-    raindrops = new Array<Raindrop>();
+    raindrops = new Array<>();
     spawnRaindrop();
   }
 
