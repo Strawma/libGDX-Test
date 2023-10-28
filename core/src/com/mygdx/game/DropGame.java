@@ -1,13 +1,17 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
+import java.util.Vector;
 
 public class DropGame extends ApplicationAdapter {
 	private Texture dropImage;
@@ -50,6 +54,18 @@ public class DropGame extends ApplicationAdapter {
 		batch.begin();
 		bucket.draw(batch);
 		batch.end();
+
+		// moves bucket based on keyboard input
+		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) bucket.moveLeft();
+		if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) bucket.moveRight();
+
+		// moves bucket based on mouse input
+		if (Gdx.input.isTouched()) {
+			Vector3 touchPos = new Vector3();
+			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0); // gets mouse position
+			camera.unproject(touchPos); // converts mouse position to game coordinates
+			bucket.updateMouse(touchPos.x);
+		}
 	}
 	
 	@Override

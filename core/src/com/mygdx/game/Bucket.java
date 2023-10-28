@@ -1,4 +1,5 @@
 package com.mygdx.game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -21,6 +22,30 @@ public class Bucket extends Rectangle {
 
   public void draw(SpriteBatch batch) {
     batch.draw(bucketImage, x, y);
+  }
+
+  public void updateMouse(float mouseX) {
+    x = mouseX - (float) SIZE / 2;
+    clampLeft();
+    clampRight();
+  }
+
+  public void moveLeft() {
+    x -= 200 * Gdx.graphics.getDeltaTime();
+    clampLeft();
+  }
+
+  public void moveRight() {
+    x += 200 * Gdx.graphics.getDeltaTime();
+    clampRight();
+  }
+
+  private void clampLeft() {
+    if (x < 0) x = 0;
+  }
+
+  private void clampRight() {
+    if (x > DropGame.WIDTH - SIZE) x = DropGame.WIDTH - SIZE;
   }
 
 }
