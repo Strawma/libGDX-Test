@@ -13,15 +13,15 @@ import com.badlogic.gdx.math.Vector3;
  */
 public class Bucket extends Rectangle implements ISprite {
 
-  public static final Texture TEXTURE = new Texture("bucket.png");
-  public static final int SIZE = TEXTURE.getWidth();
+  public static Texture texture;
+  public static final int SIZE = 64;
   public static final int SPEED = 500;
   private int score;
   private final BitmapFont scoreFont;
 
   public Bucket() {
     super();
-    x = (float) DropGame.WIDTH / 2 - (float) SIZE / 2; // center of screen
+    x = (float) Drop.WIDTH / 2 - (float) SIZE / 2; // center of screen
     y = 20; // 20 pixels above bottom of screen
     width = SIZE;
     height = SIZE;
@@ -30,18 +30,21 @@ public class Bucket extends Rectangle implements ISprite {
   }
 
   public void draw(SpriteBatch batch) {
-    batch.draw(TEXTURE, x, y);
+    batch.draw(texture, x, y);
     scoreFont.draw(batch, "Score: " + score, x, y);
   }
 
+  public static void create() {
+    texture = new Texture("bucket.png");
+  }
   public static void dispose() {
-    TEXTURE.dispose();
+    texture.dispose();
   }
 
-  public void update(Vector3 touchPos) {
+  public void update(float delta, Vector3 touchPos) {
     // moves bucket based on keyboard input
-    if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) moveLeft();
-    if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) moveRight();
+    if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) moveLeft(delta);
+    if (Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) moveRight(delta);
 
     // moves bucket based on mouse input
     if (touchPos != null) updateMouse(touchPos.x);
@@ -53,13 +56,13 @@ public class Bucket extends Rectangle implements ISprite {
     clampRight();
   }
 
-  private void moveLeft() {
-    x -= SPEED * Gdx.graphics.getDeltaTime();
+  private void moveLeft(float delta) {
+    x -= SPEED * delta;
     clampLeft();
   }
 
-  private void moveRight() {
-    x += SPEED * Gdx.graphics.getDeltaTime();
+  private void moveRight(float delta) {
+    x += SPEED * delta;
     clampRight();
   }
 
@@ -70,8 +73,8 @@ public class Bucket extends Rectangle implements ISprite {
   }
 
   private void clampRight() {
-    if (x > DropGame.WIDTH - SIZE) {
-      x = DropGame.WIDTH - SIZE;
+    if (x > Drop.WIDTH - SIZE) {
+      x = Drop.WIDTH - SIZE;
     }
   }
 

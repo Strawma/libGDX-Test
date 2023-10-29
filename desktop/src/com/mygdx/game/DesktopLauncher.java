@@ -8,9 +8,9 @@ public class DesktopLauncher {
 	public static void main (String[] args) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("Drop Game");
-		config.setWindowedMode(DropGame.WIDTH, DropGame.HEIGHT);
+		config.setWindowedMode(Drop.WIDTH, Drop.HEIGHT);
 		config.useVsync(true);
 		config.setForegroundFPS(60);
-		new Lwjgl3Application(new DropGame(), config);
+		new Lwjgl3Application(new Drop(), config);
 	}
 }

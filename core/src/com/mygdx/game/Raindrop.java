@@ -10,31 +10,34 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Raindrop extends Rectangle implements ISprite{
 
-  public static final Texture TEXTURE = new Texture("drop.png");
-  public static final int SIZE = TEXTURE.getWidth();
+  public static Texture texture;
+  public static final int SIZE = 64;
 
   public Raindrop() {
     super();
-    x = MathUtils.random(0, DropGame.WIDTH - SIZE);
-    y = DropGame.HEIGHT;
+    x = MathUtils.random(0, Drop.WIDTH - SIZE);
+    y = Drop.HEIGHT;
     width = SIZE;
     height = SIZE;
   }
 
   public void draw(SpriteBatch batch) {
-    batch.draw(TEXTURE, x, y);
+    batch.draw(texture, x, y);
   }
 
-  public void update() {
-    fall();
+  public void update(float delta) {
+    fall(delta);
   }
 
+  public static void create() {
+    texture = new Texture("drop.png");
+  }
   public static void dispose() {
-    TEXTURE.dispose();
+    texture.dispose();
   }
 
-  private void fall() {
-    y -= (int) (200 * Gdx.graphics.getDeltaTime());
+  private void fall(float delta) {
+    y -= (int) (200 * delta);
   }
 
   public boolean isOffScreen() {

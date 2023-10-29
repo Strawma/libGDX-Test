@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Raindrops {
 
   private final Array<Raindrop> raindrops;
-  private static final Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
+  private static Sound dropSound;
   private static final float DROP_SOUND_VOLUME = 0.1f;
   private long lastDropTime;
 
@@ -24,13 +24,13 @@ public class Raindrops {
     lastDropTime = TimeUtils.nanoTime();
   }
 
-  public void update(Bucket bucket) {
+  public void update(float delta, Bucket bucket) {
     if (TimeUtils.nanoTime() - lastDropTime > 1000000000) {
       spawnRaindrop();
     }
     for (Iterator<Raindrop> iter = raindrops.iterator(); iter.hasNext(); ) {
       Raindrop raindrop = iter.next();
-      raindrop.update();
+      raindrop.update(delta);
       if (raindrop.isOffScreen()) {
         iter.remove();
       }
@@ -46,6 +46,11 @@ public class Raindrops {
     for (Raindrop raindrop : raindrops) {
       raindrop.draw(spriteBatch);
     }
+  }
+
+  public static void create() {
+    dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
+    Raindrop.create();
   }
 
   public static void dispose() {
