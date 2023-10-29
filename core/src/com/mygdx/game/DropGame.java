@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 public class DropGame extends ApplicationAdapter {
 
 	private Music rainMusic;
+	private static final float RAIN_MUSIC_VOLUME = 0.1f;
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -42,6 +43,7 @@ public class DropGame extends ApplicationAdapter {
 
 		// plays rain music
 		rainMusic.setLooping(true);
+		rainMusic.setVolume(RAIN_MUSIC_VOLUME);
 		rainMusic.play();
 
 	}
