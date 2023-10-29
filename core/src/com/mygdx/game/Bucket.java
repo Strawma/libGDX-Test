@@ -27,6 +27,10 @@ public class Bucket extends Rectangle implements ISprite {
     batch.draw(TEXTURE, x, y);
   }
 
+  public static void dispose() {
+    TEXTURE.dispose();
+  }
+
   public void update(Vector3 touchPos) {
     // moves bucket based on keyboard input
     if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) moveLeft();

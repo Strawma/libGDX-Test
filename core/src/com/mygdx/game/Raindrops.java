@@ -1,4 +1,6 @@
 package com.mygdx.game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array; // array acts like arraylist with less garbage
 import com.badlogic.gdx.utils.TimeUtils;
@@ -7,6 +9,7 @@ import java.util.Iterator;
 public class Raindrops {
 
   private final Array<Raindrop> raindrops;
+  private static final Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
   private long lastDropTime;
 
   public Raindrops() {
@@ -19,7 +22,7 @@ public class Raindrops {
     lastDropTime = TimeUtils.nanoTime();
   }
 
-  public void update() {
+  public void update(Bucket bucket) {
     if (TimeUtils.nanoTime() - lastDropTime > 1000000000) {
       spawnRaindrop();
     }
@@ -29,6 +32,10 @@ public class Raindrops {
       if (raindrop.isOffScreen()) {
         iter.remove();
       }
+      if (raindrop.overlapsBucket(bucket)) {
+        dropSound.play();
+        iter.remove();
+      }
     }
   }
 
@@ -36,5 +43,10 @@ public class Raindrops {
     for (Raindrop raindrop : raindrops) {
       raindrop.draw(spriteBatch);
     }
+  }
+
+  public static void dispose() {
+    dropSound.dispose();
+    Raindrop.dispose();
   }
 }

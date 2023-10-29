@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.Gdx;
 
 public class DropGame extends ApplicationAdapter {
 
-	private Sound dropSound;
 	private Music rainMusic;
 
 	private OrthographicCamera camera;
@@ -27,7 +25,6 @@ public class DropGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		// loads assets - stored in assets folder
-		dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
 		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
 		// creates camera
@@ -43,6 +40,10 @@ public class DropGame extends ApplicationAdapter {
 		// creates raindrops array
 		raindrops = new Raindrops();
 
+		// plays rain music
+		rainMusic.setLooping(true);
+		rainMusic.play();
+
 	}
 
 	@Override
@@ -56,8 +57,8 @@ public class DropGame extends ApplicationAdapter {
 
 	public void draw() {
 		batch.begin();
-		bucket.draw(batch);
 		raindrops.draw(batch);
+		bucket.draw(batch);
 		batch.end();
 	}
 
@@ -70,11 +71,14 @@ public class DropGame extends ApplicationAdapter {
 		}
 
 		bucket.update(touchPos);
-		raindrops.update();
+		raindrops.update(bucket);
 	}
 	
 	@Override
 	public void dispose () {
+		Bucket.dispose();
+		Raindrops.dispose();
+		rainMusic.dispose();
 		batch.dispose();
 	}
 }

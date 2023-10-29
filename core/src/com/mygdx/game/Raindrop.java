@@ -3,7 +3,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import java.awt.Rectangle;
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Raindrop class - represents a raindrop that falls from the sky.
@@ -29,11 +29,19 @@ public class Raindrop extends Rectangle implements ISprite{
     fall();
   }
 
+  public static void dispose() {
+    TEXTURE.dispose();
+  }
+
   private void fall() {
     y -= (int) (200 * Gdx.graphics.getDeltaTime());
   }
 
   public boolean isOffScreen() {
     return y + SIZE < 0;
+  }
+
+  public boolean overlapsBucket(Bucket bucket) {
+    return this.overlaps(bucket);
   }
 }
