@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -14,6 +15,9 @@ public class Bucket extends Rectangle implements ISprite {
 
   public static final Texture TEXTURE = new Texture("bucket.png");
   public static final int SIZE = TEXTURE.getWidth();
+  public static final int SPEED = 500;
+  private int score;
+  private final BitmapFont scoreFont;
 
   public Bucket() {
     super();
@@ -21,10 +25,13 @@ public class Bucket extends Rectangle implements ISprite {
     y = 20; // 20 pixels above bottom of screen
     width = SIZE;
     height = SIZE;
+    score = 0;
+    scoreFont = new BitmapFont();
   }
 
   public void draw(SpriteBatch batch) {
     batch.draw(TEXTURE, x, y);
+    scoreFont.draw(batch, "Score: " + score, x, y);
   }
 
   public static void dispose() {
@@ -47,12 +54,12 @@ public class Bucket extends Rectangle implements ISprite {
   }
 
   private void moveLeft() {
-    x -= 200 * Gdx.graphics.getDeltaTime();
+    x -= SPEED * Gdx.graphics.getDeltaTime();
     clampLeft();
   }
 
   private void moveRight() {
-    x += 200 * Gdx.graphics.getDeltaTime();
+    x += SPEED * Gdx.graphics.getDeltaTime();
     clampRight();
   }
 
@@ -68,4 +75,11 @@ public class Bucket extends Rectangle implements ISprite {
     }
   }
 
+  public int getScore() {
+    return score;
+  }
+
+  public void incrementScore() {
+    score++;
+  }
 }

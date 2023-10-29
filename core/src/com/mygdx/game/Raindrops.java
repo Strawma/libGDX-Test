@@ -36,6 +36,7 @@ public class Raindrops {
       }
       if (raindrop.overlapsBucket(bucket)) {
         dropSound.play(DROP_SOUND_VOLUME);
+        bucket.incrementScore();
         iter.remove();
       }
     }
